@@ -93,20 +93,9 @@ public class DynamoDBServiceImpl implements DynamoDBService {
             return getJsonResponse ("Error: User not found");
         }
 
-        User updatedAttributes = new Gson().fromJson(inputBody, User.class);
+        User inputUser = new Gson().fromJson(inputBody, User.class);
 
-        if (updatedAttributes.getName() != null) {
-            existingUser.setName(updatedAttributes.getName());
-        }
-        if (updatedAttributes.getLocation() != null) {
-            existingUser.setLocation(updatedAttributes.getLocation());
-        }
-        if (updatedAttributes.getBirthday() != null) {
-            existingUser.setBirthday(updatedAttributes.getBirthday());
-        }
-        if (updatedAttributes.getSocialMedia() != null) {
-            existingUser.setSocialMedia(updatedAttributes.getSocialMedia());
-        }
+        updateUsersNotNullAttributes(existingUser, inputUser);
 
         dynamoDBMapper.save(existingUser);
         return getJsonResponse ("User updated successfully: " + userId);
